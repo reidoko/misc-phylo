@@ -3,6 +3,7 @@ import argparse
 from Bio import AlignIO
 from functools import reduce
 from pathlib import Path
+from tqdm import tqdm
 
 def read_alignment(a_path, form=None):
     a_path = Path(a_path)
@@ -74,10 +75,9 @@ concatenated = next(alignments)
 ix = 0
 start=1
 partitions = [f"{args.model}, {args.alignments[ix].stem} = {start}-{concatenated.get_alignment_length()}"]
-print(args.alignments[ix].stem)
-for msa in alignments:
+# print(args.alignments[ix].stem)
+for msa in tqdm(alignments, total=len(alignments)):
     ix += 1
-    print(args.alignments[ix].stem)
     start = concatenated.get_alignment_length()
     concatenated += msa
     partitions += [f"{args.model}, {args.alignments[ix].stem} = {start+1}-{concatenated.get_alignment_length()}"]
