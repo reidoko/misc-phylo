@@ -39,7 +39,7 @@ def get_nontrivial_bipartitions(tree):
 
     return biparts
 
-def get_raxml_nontrivial_bips_and_support(tree):
+def get_nontrivial_bips_and_support(tree):
     biparts = set()
     bs = []
     all_leaves = frozenset([x.name for x in tree.get_leaves()])
