@@ -40,7 +40,6 @@ def mean_discordance(trees):
     return discordance / (n_trees * (n_trees-1)//2)
 
 parser = argparse.ArgumentParser(description="Calculate NRF between all combinations of trees in a file")
-parser = argparse.ArgumentParser(description="Rename nodes")
 parser.add_argument("trees", nargs='*', type=Tree, help="Trees to use")
 
 args = parser.parse_args()
