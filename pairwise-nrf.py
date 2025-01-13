@@ -3,6 +3,7 @@ import argparse
 from ete3 import Tree
 from itertools import combinations
 from collections import Counter, defaultdict
+from pathlib import Path
 
 def get_leafset(node):
     if node.is_leaf():
@@ -39,8 +40,18 @@ def mean_discordance(trees):
         discordance += c1*c2*(len(b1.symmetric_difference(b2))/(len(b1) + len(b2))) 
     return discordance / (n_trees * (n_trees-1)//2)
 
+def newick_or_file(inp):
+    input_path = Path(inp)
+    if input_path.exists():
+        return [Tree(x) for x in open(input_path) if len(x) > 0]
+    else:
+        return [Tree(newick=inp)]
+    
+def flatten(list):
+    return [x if not isinstance(sublist, Tree) else sublist for sublist in list for x in sublist ]
 parser = argparse.ArgumentParser(description="Calculate NRF between all combinations of trees in a file")
-parser.add_argument("trees", nargs='*', type=Tree, help="Trees to use")
+parser.add_argument("trees", nargs="*", type=newick_or_file, help="Trees to use")
 
 args = parser.parse_args()
-print(mean_discordance(args.trees))
+trees = flatten(args.trees)
+print(mean_discordance(trees))
